@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?define ProductCode = {BF724E6E-F477-4E4D-94CD-28DE42088C29} ?>
+<?define UpgradeCode = {39683A09-5211-4552-8B48-2BD9C11EAF72} ?>
+<?define Manufacturer = SSR ?>
+<?define ProductName = SSR Reporting?>
+
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:iis="http://schemas.microsoft.com/wix/IIsExtension"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension" xmlns:bal="http://schemas.microsoft.com/wix/BalExtension">
+  <Bundle Name="$(var.ProductName)" Version="$(var.ProductVer)" Manufacturer="$(var.Manufacturer)" UpgradeCode="$(var.UpgradeCode)" SplashScreenSourceFile="SplashScreen.bmp">
+
+    <!--<BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.RtfLicense">
+      <bal:WixStandardBootstrapperApplication
+            LicenseFile="./EDMRLicense.rtf" />
+    </BootstrapperApplicationRef>-->
+
+    <BootstrapperApplicationRef Id="ManagedBootstrapperApplicationHost">
+      <Payload SourceFile="$(var.BootstrapperUI.TargetDir)BootstrapperUI.dll" />
+      <Payload SourceFile= "$(var.BootstrapperUI.TargetDir)BootstrapperCore.config" />
+      <Payload SourceFile= "$(var.BootstrapperUI.TargetDir)Prism.dll" />
+      <Payload SourceFile= "$(var.BootstrapperUI.TargetDir)Prism.Wpf.dll" />
+    </BootstrapperApplicationRef>
+
+    <WixVariable Id="WixMbaPrereqLicenseUrl" Value=""/>
+    <WixVariable Id="WixMbaPrereqPackageId" Value=""/>
+
+
+    <Chain ParallelCache="yes">
+      <!--The list of chained packages. -->
+      <!--AppServer & Refresh Server-->
+      <PackageGroupRef Id="StartUpPackage"/>
+    </Chain>
+  </Bundle>
+
+  <!--StartUp Installer-->
+  <Fragment>
+    <PackageGroup Id="StartUpPackage">
+      <MsiPackage Id="StartUpPackage" SourceFile="$(var.StartUp.TargetPath)" Permanent="no"
+                  Compressed="yes" Vital="yes" Visible="no" DisplayInternalUI="yes"
+                  InstallCondition="StartUpEnabled=&quot;True&quot;">
+        <MsiProperty Name="INSTALLDIR" Value="D:\intrabode\"/>
+      </MsiPackage>
+    </PackageGroup>
+  </Fragment>
+
+</Wix>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product Id="*" Name="StartUp" Language="1033" Version="1.0.0.0" Manufacturer="SSR" UpgradeCode="c819403e-0c6f-4d8d-89da-aa0915b02cf3">
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+
+    <!--Media element-->
+    <Media Id='1' Cabinet='StartUp.cab' EmbedCab='yes' />
+
+    <!--Logging.Location will default to %TEMP%\MSI{random chars}.LOG.-->
+    <Property Id="MsiLogging" Value="v" />
+
+    <Feature Id="ProductFeature" Title="StartUp" Level="1">
+      <ComponentGroupRef Id="ProductComponents" />
+    </Feature>
+    <UIRef Id="CustomUI"/>
+  </Product>
+
+
+  <Fragment>
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="INSTALLDIR"/>
+    </Directory>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="ProductComponents" Directory="INSTALLDIR">
+      <Component Id="cmp_TestFile" Guid="{73F77604-1B49-4DCF-BC9F-7D5DC6271D40}">
+        <File Id="fl_TestFile" KeyPath="yes" Source="TestFile.txt"/>
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <!--UI BEGIN-->
+    <Property Id="WIXUI_INSTALLDIR" Value='INSTALLDIR'/>
+
+    <!-- reference this WixUI as this sets the value of  WIXUI_INSTALLDIR-->
+    <UIRef Id="WixUI_InstallDir" />
+
+    <UI Id="CustomUI">
+      <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="InstallDirDlg" Order="2">1</Publish>
+      <Publish Dialog="InstallDirDlg"	Control="Back" Event="NewDialog" Value="WelcomeDlg"	Order="1">1</Publish>
+    </UI>
+
+    <!--UI END-->
+  </Fragment>
+</Wix>
